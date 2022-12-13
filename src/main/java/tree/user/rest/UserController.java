@@ -20,11 +20,11 @@ public class UserController {
      * @return resultDto
      */
     public ResultDto oAuthKakaoLoginInfo(KakaoLoginRequestDto kakaoLoginRequestDto){
-        ResultDto resultDto;
+        ResultDto resultDto = null;
 
 
 
-        resultDto.setData();
+        //resultDto.setData();
         return resultDto;
     }
 
@@ -34,7 +34,7 @@ public class UserController {
      * @return
      */
     public ResultDto getKaokaoLoginInfo(KakaoLoginRequestDto kakaoLoginRequestDto){
-        ResultDto resultDto;
+        ResultDto resultDto = null;
 
         userService.getKaokaoLoginInfo(kakaoLoginRequestDto);
 
