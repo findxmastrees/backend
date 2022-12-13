@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tree.commentReview.mapper.CommentReviewMapper">
+    <insert id="insertCommentReview">
+        INSERT INTO comment_review
+        (commentId, treeId, userId, regDate)
+        VALUES(#{commentId}, #{treeId}, #{userId}, now());
+    </insert>
+
+    <delete id="deleteCommentReview">
+        delete from comment_review
+        where treeId = #{treeId}
+         and userId = #{userId}
+    </delete>
+
+    <select id="getCommentReview" resultType="tree.commentReview.dto.CommentReviewResponseDto">
+        select cr.commentId, count(*) as count, ccr.comment
+        from comment_review cr
+        left join cd_comment_review ccr
+        on cr.commentId = ccr.commentId
+        where cr.treeId = #{treeId}
+        group by cr.commentId
+    </select>
+
+    <select id="getMyComment" resultType="int">
+        select commentId
+        from comment_review cr
+        where treeId = #{treeId} and userId = #{userId}
+    </select>
+</mapper>

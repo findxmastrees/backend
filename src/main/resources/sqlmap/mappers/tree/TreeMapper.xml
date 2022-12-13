@@ -2,21 +2,110 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tree.tree.mapper.TreeMapper">
     <select id="getTreeList" resultType="tree.tree.dto.TreeResponseDto">
-        select *
-          from tree
-         where ST_DISTANCE_SPHERE(point(#{mapX}, #{mapY}), point(treeX,treeY)) <![CDATA[ <= ]]> 1000  /* 1000M */
+        select *, GROUP_CONCAT(reviewImg) as reviewImgListString
+        from(
+        select t.* ,
+        case when #{mapX} is not null and  #{mapY} is not null then  round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY, treeX)))
+        else null end as distance,
+        case when s.treeId then 'Y'
+        else 'N' end as likeYn,
+        r.reviewImg ,
+        ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank,
+        ifnull(rc.reviewCnt,0) as reviewCnt
+        from tree t
+        left join star s
+        on t.treeId = s.treeId
+        and s.userId = #{userId}
+        left join review r
+        on r.treeId = t.treeId
+        and r.reviewImg is not null
+        left join ( select treeId, count(*) as reviewCnt from review
+        group by treeId) rc
+        on t.treeId = rc.treeId
+        where t.treeY between #{southwestY} and #{northeastY}
+        and t.treeX between #{southwestX} and #{northeastX}
+        ) as t
+        where imgRank <![CDATA[ <= ]]> 3
+        group  by t.treeId
+
+    </select>
+
+    <select id="getRecommendTreeList" resultType="tree.tree.dto.TreeResponseDto">
+        select *, GROUP_CONCAT(reviewImg) as reviewImgListString
+        from(
+        select t.* , round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX))) as distance,
+        ifnull(rc.reviewCnt,0)  as reviewCnt,
+        case when s.treeId then 'Y'
+        else 'N' end as likeYn,
+        r.reviewImg ,
+        ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank
+        from tree t
+        left join star s
+        on t.treeId = s.treeId
+        and s.userId = #{userId}
+        left join review r
+        on r.treeId = t.treeId
+        and r.reviewImg is not null
+        left join ( select treeId, count(*) as reviewCnt from review
+        group by treeId) rc
+        on t.treeId = rc.treeId
+        where ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)) <![CDATA[ <= ]]>  10000
+        ) as t
+        where imgRank <![CDATA[ <= ]]> 3
+        group  by t.treeId
+        order by reviewCnt desc, distance
+        limit 3
     </select>
 
     <select id="getTreeListBySearch" resultType="tree.tree.dto.TreeResponseDto">
-        select *
-          from tree
-         where treeName like concat('%',#{searchParam},'%')
-            or treeAddr like concat('%',#{searchParam},'%')
+        select *, GROUP_CONCAT(reviewImg) as reviewImgListString
+        from(
+        select t.* ,
+        case when #{mapX} is not null and #{mapY} is not null then  round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)))
+        else null end as distance,
+        case when s.treeId then 'Y'
+        else 'N' end as likeYn,
+        r.reviewImg ,
+        ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank,
+        ifnull(rc.reviewCnt,0)  as reviewCnt
+        from tree t
+        left join star s
+        on t.treeId = s.treeId
+        and s.userId = #{userId}
+        left join review r
+        on r.treeId = t.treeId
+        and r.reviewImg is not null
+        left join ( select treeId, count(*) as reviewCnt from review
+        group by treeId) rc
+        on t.treeId = rc.treeId
+        where t.treeName like concat('%',#{searchParam},'%')
+        or t.treeAddr like concat('%',#{searchParam},'%')
+        or t.treeDetailAddr  like  concat('%',#{searchParam},'%')
+        ) as t
+        where imgRank <![CDATA[ <= ]]> 3
+        group  by t.treeId
+        order by distance , reviewCnt desc
     </select>
 
     <select id="getTree" resultType="tree.tree.dto.TreeDetailResponseDto">
-        select t.*,
-               case when s.userId  then true else false end as treeLike
+        SELECT t.treeId
+             , t.treeName
+             , t.treeAddr
+             , t.treeDetailAddr
+             , t.treeX
+             , t.treeY
+             , t.outdoorYn
+             , t.petYn
+             , t.ableDays
+             , date_format(t.startDate, '%Y-%m-%d')
+             , date_format(t.endDate, '%Y-%m-%d')
+             , t.etc
+             , case when s.userId is not null then true else false end as treeLike
+             , case when #{mapX} is not null and #{mapY} is not null
+                    then  round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)))
+                    else null end as distance
+             , (select count(*) from review where treeId = #{treeId} and reviewImg is not null ) as treeImgCnt
+             , (select count(*) from review where treeId = #{treeId}) as reviewCnt
           from tree t
           left join star s
             on t.treeId  = s.treeId
@@ -34,17 +123,30 @@
             regId,
             regDate,
             modId,
-            modDate)
+            modDate,
+            outdoorYn,
+            petYn,
+            ableDays,
+            startDate,
+            endDate,
+            etc
+        )
         VALUES(
             #{treeName},
             #{treeAddr},
             #{treeDetailAddr},
             #{treeX},
             #{treeY},
-            'admin',
+            #{userId},
             now(),
-            'admin',
-            now()
+            #{userId},
+            now(),
+            #{outdoorYn},
+            #{petYn},
+            #{ableDays},
+            date_format(#{startDate}, '%Y%m%d'),
+            date_format(#{endDate}, '%Y%m%d'),
+            #{etc}
         )
     </insert>
 

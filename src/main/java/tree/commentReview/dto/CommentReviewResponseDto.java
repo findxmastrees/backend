@@ -1,17 +1,15 @@
-package tree.tree.dto;
-
+package tree.commentReview.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
-import tree.config.AuthDto;
 
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class TreeDetailRequestDto extends AuthDto {
-	private String treeId;
-	private String mapX; // 선택값
-	private String mapY; // 선택값
+public class CommentReviewResponseDto {
+    private String commentId;
+    private String comment; //코멘트명
+    private String count; //선택개수
 }
