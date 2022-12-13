@@ -21,8 +21,8 @@ public class TreeController {
     private final TreeService treeService;
 
     /**
-     * 가까운 트리 목록 조회
-     *
+     * 지도 범위 내 트리 목록 조회
+     * @param params 북동좌표, 남서 좌표
      * @return
      */
     @GetMapping
@@ -40,7 +40,26 @@ public class TreeController {
     }
 
     /**
-     * 검색한 트리 목록 조회
+     * 현재위치 기준 10km이내 후기 많은 순으로 3개 조회, 후기 개수 같을경우 가까운 순
+     * @param params 북동좌표, 남서 좌표
+     * @return
+     */
+    @GetMapping("/recommend")
+    public ResultDto getRecommendTreeList(@RequestParam Map<String, String> params) {
+        // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
+        ObjectMapper mapper = new ObjectMapper();
+        TreeRequestDto treeRequestDto = mapper.convertValue(params, TreeRequestDto.class);
+
+        ResultDto resultDto = new ResultDto();
+        List<TreeResponseDto> treeResponseDto = treeService.getRecommendTreeList(treeRequestDto);
+        resultDto.setSuccess(true);
+        resultDto.setData(treeResponseDto);
+
+        return resultDto;
+    }
+
+    /**
+     * 검색한 트리 목록 조회 - 현재위치 데이터 있을 경우 가까운 순, 없을 경우 리뷰많은순
      * @return
      */
     @GetMapping("/search")
