@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class KakaoLoginResponseDto {
+public class KakaoTokenResponseDto {
     String kakaoToken;
     String email;
     String nickname;

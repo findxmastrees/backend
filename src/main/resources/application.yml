@@ -12,3 +12,12 @@ spring:
 mybatis:
   config-location: classpath:sqlmap/sqlmap-config.xml
   mapper-locations: classpath*:sqlmap/mappers/**/*.xml
+
+# kakao auth info
+oauth:
+  kakao:
+    infoUrl: https://kapi.kakao.com                   #
+    baseUrl: https://kauth.kakao.com                  # 인가코드 요청 url
+    clientId: 6e8e0e1b1c81cbfb29ac2e7cc2576b6e        # rest api key
+    redirectId: https://localhost:3000/oauth/kakao    # token uri
+    secretKey: a3lNifTx4xim2mKIUXbbjyuTbfoQM1YU       # admin key

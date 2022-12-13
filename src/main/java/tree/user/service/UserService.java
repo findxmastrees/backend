@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tree.user.dto.KakaoLoginRequestDto;
-import tree.user.dto.KakaoLoginResponseDto;
+import tree.user.dto.KakaoTokenRequestDto;
+import tree.user.dto.KakaoTokenResponseDto;
 import tree.user.mapper.UserMapper;
 
 @Slf4j
@@ -14,7 +14,7 @@ import tree.user.mapper.UserMapper;
 @Transactional
 public class UserService {
     UserMapper userMapper;
-    public KakaoLoginResponseDto getKaokaoLoginInfo(KakaoLoginRequestDto kakaoLoginRequestDto){
+    public KakaoTokenResponseDto getKaokaoLoginInfo(KakaoTokenRequestDto kakaoLoginRequestDto){
         return userMapper.getKaokaoLoginInfo();
     }
 }

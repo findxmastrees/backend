@@ -1,10 +1,10 @@
 package tree.user.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import tree.user.dto.KakaoLoginResponseDto;
+import tree.user.dto.KakaoTokenResponseDto;
 
 @Mapper
 public interface UserMapper {
 
-    KakaoLoginResponseDto getKaokaoLoginInfo();
+    KakaoTokenResponseDto getKaokaoLoginInfo();
 }
