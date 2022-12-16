@@ -1,8 +1,10 @@
 ---
+server:
+    port: ${port:8080}
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://iu51mf0q32fkhfpl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/owag27zlnmn2ve2w
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://iu51mf0q32fkhfpl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/owag27zlnmn2ve2w
     username: lwkhap0puqy6cyeq
     password: bltz2sj4sfccpgb0
     hikari:
