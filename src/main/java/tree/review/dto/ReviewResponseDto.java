@@ -22,5 +22,6 @@ public class ReviewResponseDto {
     public String modDate;
     public String userImg;
     private List<CommentReviewResponseDto> commentList; //선택한 코멘트리스트
+    private String treeId;
 
 }

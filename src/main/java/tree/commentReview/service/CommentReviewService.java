@@ -59,6 +59,10 @@ public class CommentReviewService {
         return commentReviewMapper.getCommentReview(treeDetailRequestDto);
     }
 
+    /**
+     * 전체 코멘트 리스트 조회
+     * @return
+     */
     public List<CommentReviewResponseDto> getCommentReviewInitList(){
         return commentReviewMapper.getCommentReviewInitList();
     }

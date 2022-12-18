@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tree.my.mapper.MyMapper">
+    <select id="getMyPage" resultType="tree.my.dto.MyPageResponseDto">
+        select userId
+        , nickname
+        , cui.imgUrl  as userImg
+        , (select count(*) from tree where regId = #{userId}) as registeredTreeCnt
+        , (select count(*) from star where userId = #{userId}) as savedTreeCnt
+        , (select count(*) from review r where regId =#{userId}) as registeredReviewCnt
+        from user u
+        left join cd_user_img cui
+        on u.userImg = cui.imgId
+        where userId = #{userId}
+    </select>
+
+    <select id="getMyRegisteredTree" resultType="tree.my.dto.MyTreeResponseDto">
+        select t.*
+            , (select count(*) from review where treeId=t.treeId) as reviewCnt
+        from tree t
+        where t.regId = #{userId}
+        order by t.regDate desc
+    </select>
+
+    <select id="getMySavedTree" resultType="tree.my.dto.MyTreeResponseDto">
+        select t.*
+            , (select count(*) from review where treeId=t.treeId) as reviewCnt
+        from star s
+        join tree t
+        on s.treeId = t.treeId
+        where s.userId = #{userId}
+        order by s.regDate desc
+    </select>
+
+    <select id="getMyReview" resultType="tree.review.dto.ReviewResponseDto">
+        select r.* from review r
+        where regId =#{userId}
+        order by r.regDate desc
+    </select>
+
+</mapper>

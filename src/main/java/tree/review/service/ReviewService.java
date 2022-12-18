@@ -86,7 +86,11 @@ public class ReviewService {
 
 
 		 if(reviewMapper.insertReview(reviewRequestDto) > 0){
-			int commentCnt = commentReviewService.insertCommentReview(reviewRequestDto);
+			 int commentCnt = 0;
+			 if(!CollectionUtils.isEmpty(reviewRequestDto.getCommentIdList())){
+				 commentCnt = commentReviewService.insertCommentReview(reviewRequestDto);
+			 }
+
 			result.setSuccess(true);
 			Map<String,String> data = new HashMap<>();
 			data.put("review_id",Integer.toString(reviewRequestDto.getReviewId()));
