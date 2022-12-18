@@ -168,4 +168,16 @@
          where treeId = #{treeId}
            and userId = #{userId}
     </delete>
+
+    <select id="checkDuplTreeName" resultType="int">
+        select count(*)
+          from tree
+         where treeName = #{treeName}
+    </select>
+
+    <select id="checkDuplTreeMap" resultType="int">
+        select count(*)
+        from tree
+        where ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)) <![CDATA[ < ]]> 100
+    </select>
 </mapper>

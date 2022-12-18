@@ -101,4 +101,27 @@ public class TreeService {
         treeMapper.insertTree(treePostRequestDto);
         return Integer.toString(treePostRequestDto.getTreeId());
     }
+
+    /**
+     *
+     */
+    public boolean checkDuplTreeName(TreeDuplCheckDto treeDuplCheckDto){
+        boolean isDupl = false;
+        if(treeMapper.checkDuplTreeName(treeDuplCheckDto) > 0){
+            isDupl = true;
+        }else{
+            isDupl=  false;
+        }
+        return isDupl;
+    }
+
+    public boolean checkDuplTreeMap(TreeDuplCheckDto treeDuplCheckDto){
+        boolean isDupl = false;
+        if(treeMapper.checkDuplTreeMap(treeDuplCheckDto) > 0){
+            isDupl = true;
+        }else{
+            isDupl=  false;
+        }
+        return isDupl;
+    }
 }

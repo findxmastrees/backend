@@ -12,4 +12,6 @@ public interface TreeMapper {
     List<TreeResponseDto> getTreeListBySearch(TreeRequestDto treeRequestDto);
     TreeDetailResponseDto getTree(TreeDetailRequestDto treeDetailRequestDto);
     void insertTree(TreePostRequestDto treePostRequestDto);
+    int checkDuplTreeName(TreeDuplCheckDto treeDuplCheckDto);
+    int checkDuplTreeMap(TreeDuplCheckDto treeDuplCheckDto);
 }
