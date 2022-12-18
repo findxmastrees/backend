@@ -11,5 +11,6 @@ import lombok.Setter;
 public class CommentReviewResponseDto {
     private String commentId;
     private String comment; //코멘트명
-    private String count; //선택개수
+    private String count;
+    private String iconImg;
 }

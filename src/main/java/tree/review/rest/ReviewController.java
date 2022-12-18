@@ -25,6 +25,7 @@ public class ReviewController {
     public ResultDto insertReview(ReviewPostRequestDto reviewRequestDto) throws Exception {
         reviewRequestDto.setTreeId(reviewRequestDto.getTree_id());
         reviewRequestDto.setUserId(reviewRequestDto.getUser_id());
+        reviewRequestDto.setCommentIdList(reviewRequestDto.getComment_id_list());
         return  reviewService.insertReview(reviewRequestDto);
     }
 }

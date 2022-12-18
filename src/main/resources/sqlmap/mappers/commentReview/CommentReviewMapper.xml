@@ -3,28 +3,42 @@
 <mapper namespace="tree.commentReview.mapper.CommentReviewMapper">
     <insert id="insertCommentReview">
         INSERT INTO comment_review
-        (commentId, treeId, userId, regDate)
-        VALUES(#{commentId}, #{treeId}, #{userId}, now());
+        (reviewId, commentId)
+        VALUES(#{reviewId}, #{commentId});
     </insert>
 
     <delete id="deleteCommentReview">
         delete from comment_review
-        where treeId = #{treeId}
-         and userId = #{userId}
+        where reviewId = #{reviewId}
     </delete>
 
     <select id="getCommentReview" resultType="tree.commentReview.dto.CommentReviewResponseDto">
-        select cr.commentId, count(*) as count, ccr.comment
+        select cr.commentId, count(*) as  count ,  ccr.comment, ccr.iconImg
         from comment_review cr
-        left join cd_comment_review ccr
+        join review r
+        on cr.reviewId = r.reviewId
+        join cd_comment_review ccr
         on cr.commentId = ccr.commentId
-        where cr.treeId = #{treeId}
+        where r.treeId = #{treeId}
         group by cr.commentId
+        order by count
     </select>
 
-    <select id="getMyComment" resultType="int">
-        select commentId
+    <select id="getCommentList" resultType="tree.commentReview.dto.CommentReviewResponseDto">
+        select cr.commentId
+        , ccr.comment
+        , ccr.iconImg
         from comment_review cr
-        where treeId = #{treeId} and userId = #{userId}
+        join cd_comment_review ccr
+        on cr.commentId = ccr.commentId
+        where reviewId = #{reviewId}
     </select>
+
+    <select id="getCommentReviewInitList" resultType="tree.commentReview.dto.CommentReviewResponseDto">
+        select commentId
+        , comment
+        , iconImg
+        from cd_comment_review
+    </select>
+
 </mapper>

@@ -10,10 +10,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import tree.commentReview.service.CommentReviewService;
 import tree.config.ResultDto;
 import tree.review.dto.ReviewPostRequestDto;
 import tree.review.dto.ReviewResponseDto;
@@ -32,9 +34,19 @@ import java.util.Map;
 public class ReviewService {
 
 	 private final ReviewMapper reviewMapper;
+	 private final CommentReviewService commentReviewService;
 
 	 public List<ReviewResponseDto> getReviewList(TreeDetailRequestDto treeDetailRequestDto){
-		 return reviewMapper.getReviewList(treeDetailRequestDto);
+		 List<ReviewResponseDto> reviewList = reviewMapper.getReviewList(treeDetailRequestDto);
+
+		 if(!CollectionUtils.isEmpty(reviewList)){
+			 for(ReviewResponseDto review : reviewList){
+				 review.setCommentList(commentReviewService.getCommentList(review));
+			 }
+		 }
+
+
+		 return reviewList;
 	 }
 
 	 public List<String> getReviewImgList(TreeDetailRequestDto treeDetailRequestDto){
@@ -74,9 +86,11 @@ public class ReviewService {
 
 
 		 if(reviewMapper.insertReview(reviewRequestDto) > 0){
+			int commentCnt = commentReviewService.insertCommentReview(reviewRequestDto);
 			result.setSuccess(true);
 			Map<String,String> data = new HashMap<>();
 			data.put("review_id",Integer.toString(reviewRequestDto.getReviewId()));
+			data.put("comment_count" ,Integer.toString(commentCnt));
 			result.setData(data);
 		 }
 

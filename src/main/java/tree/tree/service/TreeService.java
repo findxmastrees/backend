@@ -86,7 +86,7 @@ public class TreeService {
             //코멘트리뷰목록
             treeDetailResponseDto.setCommentReviewList(commentReviewService.getCommentReview(treeDetailRequestDto));
             //선택한 코멘트 리스트
-            treeDetailResponseDto.setMyComment(commentReviewService.getMyComment(treeDetailRequestDto));
+            //treeDetailResponseDto.setMyComment(commentReviewService.getMyComment(treeDetailRequestDto));
         }
 
         return treeDetailResponseDto;
