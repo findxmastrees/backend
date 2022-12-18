@@ -21,7 +21,7 @@
         on cr.commentId = ccr.commentId
         where r.treeId = #{treeId}
         group by cr.commentId
-        order by count
+        order by count desc
     </select>
 
     <select id="getCommentList" resultType="tree.commentReview.dto.CommentReviewResponseDto">
@@ -32,6 +32,7 @@
         join cd_comment_review ccr
         on cr.commentId = ccr.commentId
         where reviewId = #{reviewId}
+        order by cr.commentId
     </select>
 
     <select id="getCommentReviewInitList" resultType="tree.commentReview.dto.CommentReviewResponseDto">
@@ -39,6 +40,7 @@
         , comment
         , iconImg
         from cd_comment_review
+        order by commentId
     </select>
 
 </mapper>

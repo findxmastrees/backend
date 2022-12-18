@@ -133,7 +133,7 @@ public class TreeController {
             resultDto.setMsg("중복된 이름");
         }else{
             resultDto.setSuccess(true);
-            resultDto.setData("사용가능한 이름");
+            resultDto.setMsg("사용가능한 이름");
         }
         return resultDto;
     }
@@ -154,7 +154,7 @@ public class TreeController {
             resultDto.setMsg("100m이내에 이미 트리가 존재합니다.");
         }else{
             resultDto.setSuccess(true);
-            resultDto.setData("등록 가능 트리");
+            resultDto.setMsg("등록 가능 트리");
         }
         return resultDto;
     }
