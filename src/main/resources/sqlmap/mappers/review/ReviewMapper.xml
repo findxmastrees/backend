@@ -2,10 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tree.review.mapper.ReviewMapper">
     <select id="getReviewList" resultType="tree.review.dto.ReviewResponseDto">
-        select *
-        from review
-        where treeId = #{treeId}
-        order by regDate desc
+        select r.*
+             , i.imgUrl as userImg
+          from review r
+          left join user u
+            on r.regId = u.userId
+          left join cd_user_img i
+            on u.userImg = i.imgId
+         where r.treeId = #{treeId}
+         order by r.regDate desc
     </select>
 
     <select id="getReviewImgList" resultType="String">
@@ -16,4 +21,9 @@
          order by regDate desc
     </select>
 
+    <insert id="insertReview"   useGeneratedKeys="true" keyProperty="reviewId" parameterType="tree.review.dto.ReviewResponseDto">
+        INSERT INTO review
+        (treeId, title, contents, reviewImg, regId, regDate, modId, modDate)
+        VALUES(#{treeId}, #{title}, #{contents}, #{reviewImg}, #{userId}, now(), #{userId}, now())
+    </insert>
 </mapper>

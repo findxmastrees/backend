@@ -17,4 +17,5 @@ public class ReviewResponseDto {
     public String regDate;
     public String modId;
     public String modDate;
+    public String userImg;
 }
