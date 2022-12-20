@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tree.user.mapper.UserMapper">
-    <select id="getKaokaoLoginInfo" resultType="tree.user.dto.KakaoTokenResponseDto">
-        select *
-        from User
-        where token
+    <insert id="createUserInfo" parameterType="tree.config.AuthDto">
+
+        insert into user (userId, nickname, joinDate, userImg) VALUE (#{userId}, #{nickname}, CURDATE())
+    </insert>
+
+    <select id="getUserInfo" parameterType="String" resultType="tree.config.AuthDto">
+        select userId, nickName
+        from user
+        where userId = #{userId}
     </select>
+
 </mapper>

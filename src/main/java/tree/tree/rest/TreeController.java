@@ -81,8 +81,12 @@ public class TreeController {
      * @param treeDetailRequestDto
      * @return
      */
-    @GetMapping("/{treeId}")
-    public ResultDto getTree(TreeDetailRequestDto treeDetailRequestDto){
+    @GetMapping("/{tree_id}")
+    public ResultDto getTree(@PathVariable("tree_id") String treeId, @RequestParam Map<String, String> params){
+        // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
+        ObjectMapper mapper = new ObjectMapper();
+        TreeDetailRequestDto treeDetailRequestDto = mapper.convertValue(params, TreeDetailRequestDto.class);
+        treeDetailRequestDto.setTreeId(treeId);
         ResultDto resultDto = new ResultDto();
         TreeDetailResponseDto treeDetailResponseDto = treeService.getTree(treeDetailRequestDto);
         resultDto.setSuccess(true);

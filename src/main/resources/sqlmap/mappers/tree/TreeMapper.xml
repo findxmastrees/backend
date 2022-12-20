@@ -8,7 +8,7 @@
         case when #{mapX} is not null and  #{mapY} is not null then  round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY, treeX)))
         else null end as distance,
         case when s.treeId then 'Y'
-        else 'N' end as likeYn,
+        else 'N' end as treeLike,
         r.reviewImg ,
         ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank,
         ifnull(rc.reviewCnt,0) as reviewCnt
@@ -36,7 +36,7 @@
         select t.* , round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX))) as distance,
         ifnull(rc.reviewCnt,0)  as reviewCnt,
         case when s.treeId then 'Y'
-        else 'N' end as likeYn,
+        else 'N' end as treeLike,
         r.reviewImg ,
         ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank
         from tree t
@@ -64,7 +64,7 @@
         case when #{mapX} is not null and #{mapY} is not null then  round(ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)))
         else null end as distance,
         case when s.treeId then 'Y'
-        else 'N' end as likeYn,
+        else 'N' end as treeLike,
         r.reviewImg ,
         ROW_NUMBER() OVER(PARTITION BY t.treeId ORDER BY r.regDate DESC) as imgRank,
         ifnull(rc.reviewCnt,0)  as reviewCnt

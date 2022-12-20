@@ -17,6 +17,25 @@ public class UserController {
      * @Desc   카카오 로그인 토큰 저장
      * @return resultDto
      */
+/*    public ResultDto oAuthKakaoLoginInfo(KakaoLoginRequestDto kakaoLoginRequestDto){
+        ResultDto resultDto = null;
 
 
+
+        //resultDto.setData();
+        return resultDto;
+    }*/
+
+    /**
+     *
+     * @param kakaoLoginRequestDto
+     * @return
+     */
+    /*public ResultDto getKaokaoLoginInfo(KakaoLoginRequestDto kakaoLoginRequestDto){
+        ResultDto resultDto = null;
+
+        userService.getKaokaoLoginInfo(kakaoLoginRequestDto);
+
+        return resultDto;
+    }*/
 }
