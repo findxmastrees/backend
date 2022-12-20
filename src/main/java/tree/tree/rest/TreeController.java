@@ -3,6 +3,9 @@ package tree.tree.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import tree.tree.dto.*;
 import tree.tree.service.TreeService;
@@ -78,7 +81,7 @@ public class TreeController {
 
     /**
      * 트리 상세조회
-     * @param treeDetailRequestDto
+     * @param
      * @return
      */
     @GetMapping("/{tree_id}")
@@ -100,13 +103,59 @@ public class TreeController {
      * @return
      */
     @PostMapping
-    public ResultDto insertTree(@RequestBody TreePostRequestDto treePostRequestDto){
+    public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto, Errors errors){
+        if(errors.hasErrors()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getFieldError().getDefaultMessage());
+        }
+
         ResultDto resultDto = new ResultDto();
         String treeId = treeService.insertTree(treePostRequestDto);
         HashMap<String,String> map = new HashMap();
         map.put("tree_id", treeId);
         resultDto.setData(map);
         resultDto.setSuccess(true);
+        return ResponseEntity.status(HttpStatus.OK).body(resultDto);
+    }
+
+    /**
+     * 트리 이름 중복체크
+     */
+    @GetMapping("/check/name")
+    public ResultDto checkDuplTreeName( @RequestParam Map<String, String> params){
+        // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
+        ObjectMapper mapper = new ObjectMapper();
+        TreeDuplCheckDto treeDuplCheckDto = mapper.convertValue(params, TreeDuplCheckDto.class);
+
+        boolean isDupl = treeService.checkDuplTreeName(treeDuplCheckDto);
+        ResultDto resultDto = new ResultDto();
+        if(isDupl){
+            resultDto.setSuccess(false);
+            resultDto.setMsg("중복된 이름");
+        }else{
+            resultDto.setSuccess(true);
+            resultDto.setMsg("사용가능한 이름");
+        }
+        return resultDto;
+    }
+
+    /**
+     * 트리 위치 중복체크
+     */
+    @GetMapping("/check/map")
+    public ResultDto checkDuplTreeMap( @RequestParam Map<String, String> params){
+        // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
+        ObjectMapper mapper = new ObjectMapper();
+        TreeDuplCheckDto treeDuplCheckDto = mapper.convertValue(params, TreeDuplCheckDto.class);
+
+        boolean isDupl = treeService.checkDuplTreeMap(treeDuplCheckDto);
+        ResultDto resultDto = new ResultDto();
+        if(isDupl){
+            resultDto.setSuccess(false);
+            resultDto.setMsg("100m이내에 이미 트리가 존재합니다.");
+        }else{
+            resultDto.setSuccess(true);
+            resultDto.setMsg("등록 가능 트리");
+        }
         return resultDto;
     }
 }

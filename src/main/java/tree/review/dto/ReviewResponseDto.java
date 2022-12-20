@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
+import tree.commentReview.dto.CommentReviewResponseDto;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +20,8 @@ public class ReviewResponseDto {
     public String regDate;
     public String modId;
     public String modDate;
+    public String userImg;
+    private List<CommentReviewResponseDto> commentList; //선택한 코멘트리스트
+    private String treeId;
+
 }

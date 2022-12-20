@@ -97,8 +97,8 @@
              , t.outdoorYn
              , t.petYn
              , t.ableDays
-             , date_format(t.startDate, '%Y-%m-%d')
-             , date_format(t.endDate, '%Y-%m-%d')
+             , date_format(t.startDate, '%Y-%m-%d') as startDate
+             , date_format(t.endDate, '%Y-%m-%d') as endDate
              , t.etc
              , case when s.userId is not null then true else false end as treeLike
              , case when #{mapX} is not null and #{mapY} is not null
@@ -168,4 +168,16 @@
          where treeId = #{treeId}
            and userId = #{userId}
     </delete>
+
+    <select id="checkDuplTreeName" resultType="int">
+        select count(*)
+          from tree
+         where treeName = #{treeName}
+    </select>
+
+    <select id="checkDuplTreeMap" resultType="int">
+        select count(*)
+        from tree
+        where ST_DISTANCE_SPHERE(point(#{mapY}, #{mapX}), point(treeY,treeX)) <![CDATA[ < ]]> 100
+    </select>
 </mapper>
