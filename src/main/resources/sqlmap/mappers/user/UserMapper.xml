@@ -3,11 +3,11 @@
 <mapper namespace="tree.user.mapper.UserMapper">
     <insert id="createUserInfo" parameterType="tree.config.AuthDto">
 
-        insert into user (userId, nickname, joinDate, userImg) VALUE (#{userId}, #{nickname}, CURDATE())
+        insert into user (userId, nickname, joinDate) VALUE (#{userId}, #{nickname}, CURDATE())
     </insert>
 
     <select id="getUserInfo" parameterType="String" resultType="tree.config.AuthDto">
-        select userId, nickName
+        select userId, nickname
         from user
         where userId = #{userId}
     </select>

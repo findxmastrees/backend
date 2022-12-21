@@ -80,7 +80,7 @@ public class SocialLoginService {
         return accessToken;
     }
 
-    public AuthDto createKakaoUser(String accessToken) {
+    public AuthDto getKakaoUserInfo(String accessToken) {
         AuthDto authDto = new AuthDto();
 
         String reqUrl = "https://kapi.kakao.com/v2/user/me";

@@ -1,23 +1,17 @@
 package tree.user.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import tree.config.AuthDto;
 import tree.config.ResultDto;
-import tree.user.dto.KakaoTokenRequestDto;
 import tree.user.service.SocialLoginService;
 import tree.user.service.UserService;
 
-import java.sql.SQLException;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
-//@RequestMapping("/social_login")
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class SocialLoginController {
@@ -28,9 +22,12 @@ public class SocialLoginController {
 
     @ResponseBody
     @GetMapping("/kakao")
-    public ResultDto kakaoCallback(@RequestParam String code) throws Exception {
+    public ResultDto kakaoCallback(@RequestParam String code, HttpServletRequest request) throws Exception {
+        System.out.println("[Controller]SocialLoginController.kakaoCallback");
         System.out.println(code);
-        System.out.println("login ing.........");
+
+        // 세션 생성
+        HttpSession session = request.getSession();
 
         ResultDto resultDto = new ResultDto();
         int result = 0;
@@ -38,22 +35,38 @@ public class SocialLoginController {
         // get access_token by auth_code
         String access_token = socialLoginService.getKakaoAccessToken(code);
 
+        if("".equals(access_token) || access_token == null){
+            resultDto.setSuccess(false);
+            resultDto.setMsg("카카오 인증시 문제가 발생하였습니다.");
+            return resultDto;
+        }
+
         // get kakaoUserInfo by access_token
-        AuthDto authDto = socialLoginService.createKakaoUser(access_token);
+        AuthDto authDto = socialLoginService.getKakaoUserInfo(access_token);
+
+        if(ObjectUtils.isEmpty(authDto)){
+            resultDto.setSuccess(false);
+            resultDto.setMsg("카카오 로그인 정보를 가져오는 중 문제가 발생하였습니다.");
+            return resultDto;
+        }
 
         AuthDto memberDto = userService.getUserInfo(authDto.getUserId());
+
         // check user
         if(!ObjectUtils.isEmpty(memberDto)){
             // sign in
-            authDto = userService.getUserInfo(authDto.getUserId());
-            resultMsg = "로그인 성공";
+            authDto.setUserId(memberDto.getUserId());
+            authDto.setNickname(memberDto.getNickname());
+            resultMsg = "login success";
             result = 1;
         } else {
             // sign up
-            result = userService.createUserInfo(authDto);
-            resultMsg = result == 1 ? "회원가입 성공":"회원가입 실패";
+            //result = userService.createUserInfo(authDto);
+            resultMsg = "sign up";
+            result = 1;
         }
 
+        session.setAttribute("authDto", authDto);
 
         resultDto.setData(authDto);
         resultDto.setMsg(resultMsg);

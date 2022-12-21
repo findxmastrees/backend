@@ -1,6 +1,5 @@
 package tree.config;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class AuthDto {
     private String userId;
-    private String nickName;
+    private String nickname;
     private String accessToken;
 }
