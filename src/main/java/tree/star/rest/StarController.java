@@ -7,6 +7,7 @@ import tree.star.dto.StarRequestDto;
 import tree.star.service.StarService;
 import tree.tree.dto.TreeDetailResponseDto;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class StarController {
      * @return
      */
     @PostMapping
-    public ResultDto changeStar(@RequestBody StarRequestDto starRequestDto) {
+    public ResultDto changeStar(@Valid @RequestBody StarRequestDto starRequestDto) {
 
         return  starService.changeStar(starRequestDto);
     }

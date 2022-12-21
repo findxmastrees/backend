@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import tree.config.exception.ApiException;
+import tree.config.exception.ExceptionEnum;
 import tree.tree.dto.*;
 import tree.tree.service.TreeService;
 import tree.config.ResultDto;
@@ -103,11 +105,7 @@ public class TreeController {
      * @return
      */
     @PostMapping
-    public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto, Errors errors){
-        if(errors.hasErrors()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.getFieldError().getDefaultMessage());
-        }
-
+    public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto){
         ResultDto resultDto = new ResultDto();
         String treeId = treeService.insertTree(treePostRequestDto);
         HashMap<String,String> map = new HashMap();
