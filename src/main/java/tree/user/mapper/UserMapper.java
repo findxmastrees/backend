@@ -9,7 +9,8 @@ import java.sql.SQLException;
 @Mapper
 public interface UserMapper {
 
-    int createUserInfo(AuthDto authDto) throws SQLException, Exception;
-    AuthDto getUserInfo(String userId) throws SQLException, Exception;
-
+    int createUserInfo(AuthDto authDto) throws Exception;
+    AuthDto getUserInfo(String userId) throws Exception;
+    int checkNickname(String nickname) throws Exception;
+    int deleteUserInfo(String userId) throws Exception;
 }

@@ -3,6 +3,7 @@ package tree.user.service;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tree.config.AuthDto;
@@ -14,14 +15,19 @@ import java.net.*;
 
 @Service
 @RequiredArgsConstructor
+@ConfigurationProperties
 public class SocialLoginService {
 
-    private final KakaoOAuthDto kakaoOAuthDto;
+    //private final KakaoOAuthDto kakaoOAuthDto;
     //private final KakaoInfoFeignClient kakaoInfoFeignClient;
     //private final KakaoLoginFeignClient kakaoLoginFeignClient;
-    private static PasswordEncoder passwordEncoder;
-    private UserMapper userMapper;
+    //private static PasswordEncoder passwordEncoder;
 
+    /**
+     * 카카오로그인 - 인가코드 받기
+     * @param code
+     * @return
+     */
     public String getKakaoAccessToken(String code) {
         String accessToken = "";
         String refreshToken = "";
@@ -69,6 +75,7 @@ public class SocialLoginService {
 
             br.close();
             bw.close();
+
         } catch (ProtocolException e) {
             throw new RuntimeException(e);
         } catch (MalformedURLException e) {
@@ -80,6 +87,11 @@ public class SocialLoginService {
         return accessToken;
     }
 
+    /**
+     * 카카오로그인 - 카카오 사용자정보 조회
+     * @param accessToken
+     * @return
+     */
     public AuthDto getKakaoUserInfo(String accessToken) {
         AuthDto authDto = new AuthDto();
 
@@ -128,5 +140,96 @@ public class SocialLoginService {
             throw new RuntimeException(e);
         }
         return authDto;
+    }
+
+    /**
+     * 카카오 계정 연결 끊기 (회원탈퇴)
+     * @param accessToken
+     * @return
+     */
+    public String unlinkKakao(String accessToken){
+        System.out.println("[Service]"+this.getClass().getName()+"::unlinkKakao");
+        String reqUrl = "https://kapi.kakao.com/v2/user/unlink";
+        String id = "";
+
+        try {
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer "+accessToken);
+
+            System.out.println("accessToken: "+accessToken);
+            int resCode = conn.getResponseCode();
+            System.out.println("resCode: "+resCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("res body: "+ result);
+
+            JsonElement element = JsonParser.parseString(result);
+
+            id = element.getAsJsonObject().get("id").getAsString();
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (ProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return id;
+    }
+
+    /**
+     * 카카오 계정 로그아웃
+     * @return
+     */
+    public int logoutKakao(String userId, String logoutRedirectURL) throws Exception {
+        System.out.println("[Service]"+this.getClass().getName()+"::logoutKakao");
+        String state = "azzul";
+        String reqUrl = "https://kauth.kakao.com/oauth/logout";
+        int result = 0;
+
+        URL url = new URL(reqUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        conn.setRequestMethod("GET");
+        conn.setDoOutput(true);
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+        StringBuilder sb = new StringBuilder()
+                .append("client_id="+userId)
+                .append("&logout_redirect_uri="+logoutRedirectURL)
+                .append("&state="+state);
+        //?client_id=${YOUR_REST_API_KEY}&logout_redirect_uri=${YOUR_LOGOUT_REDIRECT_URI}"
+
+        bw.write(sb.toString());
+        bw.flush();
+
+        int resCode = conn.getResponseCode();
+        System.out.println("resCode: " + resCode);
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line = "";
+
+        if((line = br.readLine()) != null) {
+            line = br.readLine();
+        }
+
+        result = (state.equals(JsonParser.parseString(line).getAsJsonObject().get("state").getAsString())) ? 1 : 0;
+
+        conn.disconnect();
+        bw.close();
+        br.close();
+
+        return result;
     }
 }

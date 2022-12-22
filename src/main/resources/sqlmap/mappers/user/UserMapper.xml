@@ -11,5 +11,14 @@
         from user
         where userId = #{userId}
     </select>
+    
+    <select id="checkNickname" parameterType="String" resultType="Integer">
+        select count(*) cnt
+        from user
+        where nickname = #{nickname}
+    </select>
 
+    <delete id="deleteUserInfo" parameterType="String">
+        delete from user where userId = #{userId}
+    </delete>
 </mapper>

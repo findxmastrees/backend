@@ -17,10 +17,17 @@ import java.sql.SQLException;
 @Transactional
 public class UserService {
     private final UserMapper userMapper;
-    public int createUserInfo(AuthDto authDto) throws SQLException, Exception{
+    public int createUserInfo(AuthDto authDto) throws Exception{
         return userMapper.createUserInfo(authDto);
     }
-    public AuthDto getUserInfo(String userId) throws SQLException,Exception {
+    public AuthDto getUserInfo(String userId) throws Exception {
         return userMapper.getUserInfo(userId);
     }
+    public int checkNickname(String nickname) throws Exception {
+        return userMapper.checkNickname(nickname);
+    }
+    public int deleteUserInfo(String userId) throws Exception {
+        return userMapper.deleteUserInfo(userId);
+    }
+
 }
