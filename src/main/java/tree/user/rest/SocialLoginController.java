@@ -18,32 +18,7 @@ public class SocialLoginController {
 
     private final SocialLoginService socialLoginService;
     private final UserService userService;
-
-
-    @GetMapping("/test")
-    public ResultDto kakaoTest(@RequestParam String code, HttpServletRequest request){
-        ResultDto resultDto = new ResultDto();
-
-        System.out.println(code);
-
-        // get access_token by auth_code
-        //운영
-        String access_token = socialLoginService.getKakaoAccessToken(code,"http://whatevertree.herokuapp.com/oauth/test");
-        //로컬
-        //String access_token = socialLoginService.getKakaoAccessToken(code,"http://localhost:8080/oauth/test");
-
-        if("".equals(access_token) || access_token == null){
-            resultDto.setSuccess(false);
-            resultDto.setMsg("카카오 인증시 문제가 발생하였습니다.");
-            return resultDto;
-        }
-
-        resultDto.setSuccess(true);
-        resultDto.setMsg("access_token :: "+ access_token);
-
-        return resultDto;
-    }
-
+    
     @ResponseBody
     @GetMapping("/kakao")
     public ResultDto kakaoCallback(@RequestParam String code, HttpServletRequest request) throws Exception {

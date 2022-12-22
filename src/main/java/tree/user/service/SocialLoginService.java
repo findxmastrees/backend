@@ -89,7 +89,7 @@ public class SocialLoginService {
         return accessToken;
     }
 
-    public AuthDto getKakaoUserInfo(String accessToken) {
+    /*public AuthDto getKakaoUserInfo(String accessToken) {
         AuthDto authDto = new AuthDto();
 
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
@@ -146,14 +146,14 @@ public class SocialLoginService {
             throw new RuntimeException(e);
         }
         return authDto;
-    }
+    }*/
 
     /**
      * 카카오로그인 - 카카오 사용자정보 조회
      * @param accessToken
      * @return
      */
-    /*public AuthDto getKakaoUserInfo(String accessToken) {
+    public AuthDto getKakaoUserInfo(String accessToken) {
         AuthDto authDto = new AuthDto();
 
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
@@ -201,7 +201,7 @@ public class SocialLoginService {
             throw new RuntimeException(e);
         }
         return authDto;
-    }*/
+    }
 
     /**
      * 카카오 계정 연결 끊기 (회원탈퇴)
