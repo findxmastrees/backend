@@ -91,6 +91,7 @@
         SELECT t.treeId
              , t.treeName
              , t.treeAddr
+             , t.treeLoadAddr
              , t.treeDetailAddr
              , t.treeX
              , t.treeY
@@ -117,6 +118,7 @@
         INSERT INTO tree(
             treeName,
             treeAddr,
+            treeLoadAddr,
             treeDetailAddr,
             treeX,
             treeY,
@@ -134,6 +136,7 @@
         VALUES(
             #{treeName},
             #{treeAddr},
+            #{treeLoadAddr},
             #{treeDetailAddr},
             #{treeX},
             #{treeY},

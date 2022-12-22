@@ -20,6 +20,7 @@ public class TreePostRequestDto extends AuthDto {
     private String treeName;
     @NotBlank(message ="트리주소는 필수값입니다.")
     private String treeAddr;
+    private String treeLoadAddr;
     private String treeDetailAddr;
     @NotNull(message ="위도는 필수값입니다.")
     @Min(value= -90, message = "위도는 -90~90사이여야 합니다.")
