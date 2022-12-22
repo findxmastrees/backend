@@ -89,12 +89,71 @@ public class SocialLoginService {
         return accessToken;
     }
 
+    public AuthDto getKakaoUserInfo(String accessToken) {
+        AuthDto authDto = new AuthDto();
+
+        String reqUrl = "https://kapi.kakao.com/v2/user/me";
+
+        //get user info by access_token
+        try {
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+            conn.setDoOutput(true);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("access_token="+accessToken);
+
+            bw.write(sb.toString());
+            bw.flush();
+            System.out.println("sb: "+sb.toString());
+
+            System.out.println("accessToken: "+accessToken);
+            int resCode = conn.getResponseCode();
+            System.out.println("resCode: "+resCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            System.out.println("res body: "+ result);
+
+            JsonElement element = JsonParser.parseString(result);
+
+            String id = element.getAsJsonObject().get("id").getAsString();
+            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
+            String email = "";
+
+            if(hasEmail){
+                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+            }
+
+            System.out.println("id: "+id);
+            System.out.println("email: "+email);
+
+            authDto.setAccessToken(accessToken);
+            authDto.setUserId(id);
+
+            bw.close();
+            br.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return authDto;
+    }
+
     /**
      * 카카오로그인 - 카카오 사용자정보 조회
      * @param accessToken
      * @return
      */
-    public AuthDto getKakaoUserInfo(String accessToken) {
+    /*public AuthDto getKakaoUserInfo(String accessToken) {
         AuthDto authDto = new AuthDto();
 
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
@@ -142,7 +201,7 @@ public class SocialLoginService {
             throw new RuntimeException(e);
         }
         return authDto;
-    }
+    }*/
 
     /**
      * 카카오 계정 연결 끊기 (회원탈퇴)

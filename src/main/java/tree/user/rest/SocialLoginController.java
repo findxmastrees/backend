@@ -27,7 +27,10 @@ public class SocialLoginController {
         System.out.println(code);
 
         // get access_token by auth_code
+        //운영
         String access_token = socialLoginService.getKakaoAccessToken(code,"http://whatevertree.herokuapp.com/oauth/test");
+        //로컬
+        //String access_token = socialLoginService.getKakaoAccessToken(code,"http://localhost:8080/oauth/test");
 
         if("".equals(access_token) || access_token == null){
             resultDto.setSuccess(false);
@@ -54,7 +57,10 @@ public class SocialLoginController {
         int result = 0;
         String resultMsg = "";
         // get access_token by auth_code
+        //운영
         String access_token = socialLoginService.getKakaoAccessToken(code, "http://whatevertree.herokuapp.com/oauth/kakao");
+        //로컬
+        //String access_token = socialLoginService.getKakaoAccessToken(code, "http://localhost:8080/oauth/kakao");
 
         if("".equals(access_token) || access_token == null){
             resultDto.setSuccess(false);
