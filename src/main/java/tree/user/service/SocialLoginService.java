@@ -28,7 +28,7 @@ public class SocialLoginService {
      * @param code
      * @return
      */
-    public String getKakaoAccessToken(String code) {
+    public String getKakaoAccessToken(String code, String redirectUrl) {
         String accessToken = "";
         String refreshToken = "";
         String reqUrl = "https://kauth.kakao.com/oauth/token";
@@ -45,7 +45,9 @@ public class SocialLoginService {
 
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=6e8e0e1b1c81cbfb29ac2e7cc2576b6e"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://whatevertree.herokuapp.com/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
+            //sb.append("&redirect_uri=http://localhost:8080/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
+            //sb.append("&redirect_uri=http://whatevertree.herokuapp.com/oauth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri="+redirectUrl); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             sb.append("&client_secret=" + "a3lNifTx4xim2mKIUXbbjyuTbfoQM1YU");
 
