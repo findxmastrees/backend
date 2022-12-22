@@ -30,7 +30,7 @@ dependencyManagement {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 	compileOnly 'org.projectlombok:lombok'
@@ -43,6 +43,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	implementation 'com.google.code.gson:gson:2.8.7'
 	/* JSONParser, JSONObject설정 */
 	implementation 'com.googlecode.json-simple:json-simple:1.1'
 }
