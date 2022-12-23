@@ -18,7 +18,7 @@ public class SocialLoginController {
 
     private final SocialLoginService socialLoginService;
     private final UserService userService;
-    
+
     @ResponseBody
     @GetMapping("/kakao")
     public ResultDto kakaoCallback(@RequestParam String code, HttpServletRequest request) throws Exception {
@@ -33,9 +33,9 @@ public class SocialLoginController {
         String resultMsg = "";
         // get access_token by auth_code
         //운영
-        String access_token = socialLoginService.getKakaoAccessToken(code, "http://whatevertree.herokuapp.com/oauth/kakao");
+        //String access_token = socialLoginService.getKakaoAccessToken(code, "http://whatevertree.herokuapp.com/oauth/kakao");
         //로컬
-        //String access_token = socialLoginService.getKakaoAccessToken(code, "http://localhost:8080/oauth/kakao");
+        String access_token = socialLoginService.getKakaoAccessToken(code, "http://localhost:8080/oauth/kakao");
 
         if("".equals(access_token) || access_token == null){
             resultDto.setSuccess(false);

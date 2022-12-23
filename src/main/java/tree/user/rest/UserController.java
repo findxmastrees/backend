@@ -46,7 +46,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/signup")
-    public ResultDto signup(@RequestParam String nickname, HttpSession session) throws Exception {
+    public ResultDto signup(@RequestBody String nickname, HttpSession session) throws Exception {
         System.out.println("[Controller]UserController.signup");
         ResultDto resultDto = new ResultDto();
         AuthDto authDto = (AuthDto) session.getAttribute("authDto");
@@ -146,6 +146,10 @@ public class UserController {
         }
 
         return resultDto;
+    }
+    @GetMapping("/logoutTest")
+    public void logoutTest(HttpSession session) throws Exception {
+        System.out.println("[Controller]UserController::logoutTest");
     }
 
 
