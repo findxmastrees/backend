@@ -26,4 +26,15 @@
         (treeId, title, contents, reviewImg, regId, regDate, modId, modDate)
         VALUES(#{treeId}, #{title}, #{contents}, #{reviewImg}, #{userId}, now(), #{userId}, now())
     </insert>
+
+    <select id="getReview" resultType="tree.review.dto.ReviewResponseDto">
+        select r.*
+        , i.imgUrl as userImg
+        from review r
+        left join user u
+        on r.regId = u.userId
+        left join cd_user_img i
+        on u.userImg = i.imgId
+        where r.reviewId = #{reviewId}
+    </select>
 </mapper>

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tree.commentReview.service.CommentReviewService;
 import tree.config.ResultDto;
 import tree.review.dto.ReviewPostRequestDto;
+import tree.review.dto.ReviewRequestDto;
 import tree.review.dto.ReviewResponseDto;
 import tree.review.mapper.ReviewMapper;
 import tree.tree.dto.TreeDetailRequestDto;
@@ -104,6 +105,15 @@ public class ReviewService {
 	private String getBase64String(MultipartFile multipartFile) throws Exception {
 		byte[] bytes = multipartFile.getBytes();
 		return Base64.getEncoder().encodeToString(bytes);
+	}
+
+	public ReviewResponseDto getReview(ReviewRequestDto reviewRequestDto){
+		ReviewResponseDto responseDto =  reviewMapper.getReview(reviewRequestDto);
+
+		if(responseDto != null){
+			responseDto.setCommentList(commentReviewService.getCommentList(responseDto));
+		}
+		return responseDto;
 	}
 
 
