@@ -9,6 +9,8 @@ import tree.config.AuthDto;
 import tree.config.ResultDto;
 import tree.my.service.MyService;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/my")
 @RequiredArgsConstructor
@@ -21,8 +23,9 @@ public class MyController {
      * @return
      */
     @GetMapping
-    public ResultDto getMyPage(@RequestParam("user_id") String userId) {
+    public ResultDto getMyPage(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
         result.setSuccess(true);
@@ -36,8 +39,10 @@ public class MyController {
      * @return
      */
     @GetMapping("/registeredtree")
-    public ResultDto getMyRegisteredTree(@RequestParam("user_id") String userId) {
+    public ResultDto getMyRegisteredTree(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
         result.setSuccess(true);
@@ -51,8 +56,10 @@ public class MyController {
      * @return
      */
     @GetMapping("/savedtree")
-    public ResultDto getMySavedTree(@RequestParam("user_id") String userId) {
+    public ResultDto getMySavedTree(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
         result.setSuccess(true);
@@ -66,8 +73,10 @@ public class MyController {
      * @return
      */
     @GetMapping("/review")
-    public ResultDto getMyReview(@RequestParam("user_id") String userId)  {
+    public ResultDto getMyReview(@RequestParam("user_id") String id, HttpSession session)  {
         AuthDto authDto = new AuthDto();
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
         result.setSuccess(true);

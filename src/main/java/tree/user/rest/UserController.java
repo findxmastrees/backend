@@ -10,6 +10,8 @@ import tree.user.service.SocialLoginService;
 import tree.user.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -46,11 +48,13 @@ public class UserController {
      * @return
      */
     @PostMapping("/signup")
-    public ResultDto signup(@RequestParam String nickname, HttpSession session) throws Exception {
+    public ResultDto signup(@RequestBody HashMap<String,Object> param, HttpSession session) throws Exception {
         System.out.println("[Controller]UserController.signup");
         ResultDto resultDto = new ResultDto();
         AuthDto authDto = (AuthDto) session.getAttribute("authDto");
+        String nickname = param.get("nickname").toString();
 
+        System.out.println("nickname:" + nickname);
         System.out.println("authDto.toString() : "+ authDto.toString());
 
         int result = 0;
@@ -146,6 +150,10 @@ public class UserController {
         }
 
         return resultDto;
+    }
+    @GetMapping("/logoutTest")
+    public void logoutTest(HttpSession session) throws Exception {
+        System.out.println("[Controller]UserController::logoutTest");
     }
 
 

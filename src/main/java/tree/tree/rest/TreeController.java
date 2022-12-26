@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import tree.config.AuthDto;
 import tree.config.exception.ApiException;
 import tree.config.exception.ExceptionEnum;
 import tree.tree.dto.*;
 import tree.tree.service.TreeService;
 import tree.config.ResultDto;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -105,8 +107,10 @@ public class TreeController {
      * @return
      */
     @PostMapping
-    public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto){
+    public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto, HttpSession session){
         ResultDto resultDto = new ResultDto();
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        treePostRequestDto.setUserId(userId);
         String treeId = treeService.insertTree(treePostRequestDto);
         HashMap<String,String> map = new HashMap();
         map.put("tree_id", treeId);

@@ -16,7 +16,7 @@ import java.util.List;
 public class ReviewPostRequestDto extends AuthDto {
     @JsonIgnore
     private String treeId;
-    @NotEmpty(message ="user_id는 필수값입니다.")
+    //@NotEmpty(message ="user_id는 필수값입니다.")
     private String user_id;
     @NotEmpty(message ="tree_id는 필수값입니다.")
     private String tree_id;

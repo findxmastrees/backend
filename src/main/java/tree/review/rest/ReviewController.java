@@ -3,6 +3,7 @@ package tree.review.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tree.config.AuthDto;
 import tree.config.ResultDto;
 import tree.review.dto.ReviewPostRequestDto;
 import tree.review.dto.ReviewRequestDto;
@@ -12,6 +13,7 @@ import tree.tree.dto.TreeDetailRequestDto;
 import tree.tree.dto.TreeDetailResponseDto;
 import tree.tree.dto.TreeDuplCheckDto;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -27,9 +29,10 @@ public class ReviewController {
      * @return
      */
     @PostMapping
-    public ResultDto insertReview(@Valid @ModelAttribute ReviewPostRequestDto reviewRequestDto) throws Exception {
+    public ResultDto insertReview(@Valid @ModelAttribute ReviewPostRequestDto reviewRequestDto, HttpSession session) throws Exception {
+        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
         reviewRequestDto.setTreeId(reviewRequestDto.getTree_id());
-        reviewRequestDto.setUserId(reviewRequestDto.getUser_id());
+        reviewRequestDto.setUserId(userId);
         reviewRequestDto.setCommentIdList(reviewRequestDto.getComment_id_list());
         return  reviewService.insertReview(reviewRequestDto);
     }

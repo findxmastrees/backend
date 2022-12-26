@@ -18,7 +18,7 @@ public class SocialLoginController {
 
     private final SocialLoginService socialLoginService;
     private final UserService userService;
-    
+
     @ResponseBody
     @GetMapping("/kakao")
     public ResultDto kakaoCallback(@RequestParam String code, HttpServletRequest request) throws Exception {
@@ -69,6 +69,8 @@ public class SocialLoginController {
         }
 
         session.setAttribute("authDto", authDto);
+
+        System.out.println("kakaoSessionAuthDto >>> " + session.getAttribute("authDto").toString());
 
         resultDto.setData(authDto);
         resultDto.setMsg(resultMsg);
