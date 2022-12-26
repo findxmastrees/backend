@@ -32,9 +32,12 @@
         order by s.regDate desc
     </select>
 
-    <select id="getMyReview" resultType="tree.review.dto.ReviewResponseDto">
-        select r.* from review r
-        where regId =#{userId}
+    <select id="getMyReview" resultType="tree.my.dto.MyReviewResponseDto">
+        select r.* ,t.treeAddr, t.treeName, t.treeLoadAddr
+          from review r
+          join tree t
+          on r.treeId = t.treeId
+        where r.regId =#{userId}
         order by r.regDate desc
     </select>
 

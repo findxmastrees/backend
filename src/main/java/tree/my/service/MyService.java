@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import tree.commentReview.mapper.CommentReviewMapper;
 import tree.config.AuthDto;
 import tree.my.dto.MyPageResponseDto;
+import tree.my.dto.MyReviewResponseDto;
 import tree.my.dto.MyTreeResponseDto;
 import tree.my.mapper.MyMapper;
 import tree.review.dto.ReviewResponseDto;
@@ -35,10 +36,10 @@ public class MyService {
         return myMapper.getMySavedTree(authDto);
     }
 
-    public List<ReviewResponseDto> getMyReview(AuthDto authDto) {
-        List<ReviewResponseDto> reviewList = myMapper.getMyReview(authDto);
+    public List<MyReviewResponseDto> getMyReview(AuthDto authDto) {
+        List<MyReviewResponseDto> reviewList = myMapper.getMyReview(authDto);
         if(!CollectionUtils.isEmpty(reviewList)){
-            for(ReviewResponseDto review : reviewList){
+            for(MyReviewResponseDto review : reviewList){
                 review.setCommentList(commentReviewMapper.getCommentList(review));
             }
         }
