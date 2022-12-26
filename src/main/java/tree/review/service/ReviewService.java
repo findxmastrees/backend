@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import tree.commentReview.service.CommentReviewService;
 import tree.config.ResultDto;
+import tree.review.dto.ReviewImgResponseDto;
 import tree.review.dto.ReviewPostRequestDto;
 import tree.review.dto.ReviewRequestDto;
 import tree.review.dto.ReviewResponseDto;
@@ -50,7 +51,7 @@ public class ReviewService {
 		 return reviewList;
 	 }
 
-	 public List<String> getReviewImgList(TreeDetailRequestDto treeDetailRequestDto){
+	 public List<ReviewImgResponseDto> getReviewImgList(TreeDetailRequestDto treeDetailRequestDto){
 		 return reviewMapper.getReviewImgList(treeDetailRequestDto);
 	 }
 
