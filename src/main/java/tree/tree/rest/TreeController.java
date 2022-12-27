@@ -34,10 +34,23 @@ public class TreeController {
      * @return
      */
     @GetMapping
-    public ResultDto getTreeList(@RequestParam Map<String, String> params) {
+    public ResultDto getTreeList(@RequestParam Map<String, String> params, HttpSession session) {
         // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
         ObjectMapper mapper = new ObjectMapper();
         TreeRequestDto treeRequestDto = mapper.convertValue(params, TreeRequestDto.class);
+
+
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+        treeRequestDto.setUserId(userId);
 
         ResultDto resultDto = new ResultDto();
         List<TreeResponseDto> treeResponseDto = treeService.getTreeList(treeRequestDto);
@@ -53,10 +66,22 @@ public class TreeController {
      * @return
      */
     @GetMapping("/recommend")
-    public ResultDto getRecommendTreeList(@RequestParam Map<String, String> params) {
+    public ResultDto getRecommendTreeList(@RequestParam Map<String, String> params, HttpSession session) {
         // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
         ObjectMapper mapper = new ObjectMapper();
         TreeRequestDto treeRequestDto = mapper.convertValue(params, TreeRequestDto.class);
+
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+        treeRequestDto.setUserId(userId);
 
         ResultDto resultDto = new ResultDto();
         List<TreeResponseDto> treeResponseDto = treeService.getRecommendTreeList(treeRequestDto);
@@ -71,10 +96,22 @@ public class TreeController {
      * @return
      */
     @GetMapping("/search")
-    public ResultDto getTreeListBySearch(@RequestParam Map<String, String> params){
+    public ResultDto getTreeListBySearch(@RequestParam Map<String, String> params, HttpSession session){
         // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
         ObjectMapper mapper = new ObjectMapper();
         TreeRequestDto treeRequestDto = mapper.convertValue(params, TreeRequestDto.class);
+
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+        treeRequestDto.setUserId(userId);
 
         ResultDto resultDto = new ResultDto();
         List<TreeResponseDto> treeResponseDto = treeService.getTreeListBySearch(treeRequestDto);
@@ -90,11 +127,25 @@ public class TreeController {
      * @return
      */
     @GetMapping("/{tree_id}")
-    public ResultDto getTree(@PathVariable("tree_id") String treeId, @RequestParam Map<String, String> params){
+    public ResultDto getTree(@PathVariable("tree_id") String treeId, @RequestParam Map<String, String> params, HttpSession session){
         // jackson 라이브러리의 ObjectMapper 클래스를 이용하여  Snake Case -> Camel Case
         ObjectMapper mapper = new ObjectMapper();
         TreeDetailRequestDto treeDetailRequestDto = mapper.convertValue(params, TreeDetailRequestDto.class);
+
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+
+        treeDetailRequestDto.setUserId(userId);
         treeDetailRequestDto.setTreeId(treeId);
+
         ResultDto resultDto = new ResultDto();
         TreeDetailResponseDto treeDetailResponseDto = treeService.getTree(treeDetailRequestDto);
         resultDto.setSuccess(true);
