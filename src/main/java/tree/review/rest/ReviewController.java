@@ -2,6 +2,7 @@ package tree.review.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import tree.config.AuthDto;
 import tree.config.ResultDto;
@@ -30,7 +31,17 @@ public class ReviewController {
      */
     @PostMapping
     public ResultDto insertReview(@Valid @ModelAttribute ReviewPostRequestDto reviewRequestDto, HttpSession session) throws Exception {
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+
         reviewRequestDto.setTreeId(reviewRequestDto.getTree_id());
         reviewRequestDto.setUserId(userId);
         reviewRequestDto.setCommentIdList(reviewRequestDto.getComment_id_list());

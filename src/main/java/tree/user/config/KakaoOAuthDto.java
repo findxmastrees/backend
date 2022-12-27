@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 @ConfigurationProperties(prefix = "oauth.kakao")
 public class KakaoOAuthDto {
 
+    private String infoUrl;     // kakao info 요청 url
     private String baseUrl;     // kakao auth 요청 url
     private String clientId;    // RestApi Key
     private String redirectUri; // 인가코드 받을 uri

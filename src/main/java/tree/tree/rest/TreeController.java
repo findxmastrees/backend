@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import tree.config.AuthDto;
@@ -109,7 +110,17 @@ public class TreeController {
     @PostMapping
     public ResponseEntity insertTree(@Valid @RequestBody TreePostRequestDto treePostRequestDto, HttpSession session){
         ResultDto resultDto = new ResultDto();
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+
         treePostRequestDto.setUserId(userId);
         String treeId = treeService.insertTree(treePostRequestDto);
         HashMap<String,String> map = new HashMap();

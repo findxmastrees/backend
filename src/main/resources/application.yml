@@ -2,6 +2,7 @@
 server:
     port: ${port:8080}
 spring:
+  profiles : production
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://iu51mf0q32fkhfpl.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/owag27zlnmn2ve2w
@@ -18,8 +19,8 @@ mybatis:
 # kakao auth info
 oauth:
   kakao:
-    infoUrl: https://kapi.kakao.com                   #
-    baseUrl: https://kauth.kakao.com                  # 인가코드 요청 url
+    infoUrl: https://kapi.kakao.com                   # 정보 요청 api url
+    baseUrl: https://kauth.kakao.com                  # 권한 요청 api url
     clientId: 6e8e0e1b1c81cbfb29ac2e7cc2576b6e        # rest api key
-    redirectId: https://localhost:3000/oauth/token    # token uri
+    redirectUri: http://whatevertree.herokuapp.com/oauth/kakao    # token uri
     secretKey: a3lNifTx4xim2mKIUXbbjyuTbfoQM1YU       # admin key

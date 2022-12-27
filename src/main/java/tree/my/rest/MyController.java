@@ -1,12 +1,15 @@
 package tree.my.rest;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tree.config.AuthDto;
 import tree.config.ResultDto;
+import tree.config.exception.ApiException;
+import tree.config.exception.ExceptionEnum;
 import tree.my.service.MyService;
 
 import javax.servlet.http.HttpSession;
@@ -25,9 +28,19 @@ public class MyController {
     @GetMapping
     public ResultDto getMyPage(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
-        authDto.setUserId(userId);
         ResultDto result = new ResultDto();
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
+
+        authDto.setUserId(userId);
         result.setSuccess(true);
         result.setData(myService.getMyPage(authDto));
         return  result;
@@ -41,10 +54,19 @@ public class MyController {
     @GetMapping("/registeredtree")
     public ResultDto getMyRegisteredTree(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        String userId = "";
+        ResultDto result = new ResultDto();
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
 
         authDto.setUserId(userId);
-        ResultDto result = new ResultDto();
         result.setSuccess(true);
         result.setData(myService.getMyRegisteredTree(authDto));
         return  result;
@@ -58,7 +80,16 @@ public class MyController {
     @GetMapping("/savedtree")
     public ResultDto getMySavedTree(@RequestParam("user_id") String id, HttpSession session) {
         AuthDto authDto = new AuthDto();
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
 
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
@@ -75,7 +106,16 @@ public class MyController {
     @GetMapping("/review")
     public ResultDto getMyReview(@RequestParam("user_id") String id, HttpSession session)  {
         AuthDto authDto = new AuthDto();
-        String userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        String userId = "";
+
+        if(!ObjectUtils.isEmpty((AuthDto)session.getAttribute("authDto"))){
+            userId = ((AuthDto)session.getAttribute("authDto")).getUserId();
+        }else{
+            // Todo: 로그인 완성시 삭제
+            userId = "admin";
+            // Todo: 로그인 완성시 주석해제
+            //throw new RuntimeException(new ApiException(ExceptionEnum.SECURITY_01));
+        }
 
         authDto.setUserId(userId);
         ResultDto result = new ResultDto();
