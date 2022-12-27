@@ -13,8 +13,9 @@
          order by r.regDate desc
     </select>
 
-    <select id="getReviewImgList" resultType="String">
-        select reviewImg
+    <select id="getReviewImgList" resultType="tree.review.dto.ReviewImgResponseDto">
+        select reviewImg as url
+             , reviewId
           from review
          where treeId = #{treeId}
            and reviewImg is not null
